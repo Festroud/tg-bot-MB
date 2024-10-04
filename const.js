@@ -183,5 +183,5 @@ module.exports.text82 = text82
 module.exports.text83 = text83
 module.exports.text84 = text84
 module.exports.text85 = text85
-module.exports.text85 = text86
-module.exports.text85 = text87
+module.exports.text86 = text86
+module.exports.text87 = text87
