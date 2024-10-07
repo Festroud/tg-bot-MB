@@ -1,24 +1,21 @@
 process.setMaxListeners(20);
 const { Telegraf, Markup } = require('telegraf');
-require('dotenv').config()
-const text = require ('./const')
+require('dotenv').config();
+const text = require('./const');
 const cron = require('node-cron');
+const path = require('path');
 
-const bot = new Telegraf(process.env.BOT_TOKEN)
-
-// Пароль для авторизации
-const PASSWORD = 'bicycle';
+const bot = new Telegraf(process.env.BOT_TOKEN);
 const chatId = '-1001629025233';
-// Объект для хранения статуса авторизации пользователей
-const userAuthStatus = {};
-// Обработчик ввода текста
-bot.on('text', (ctx) => {
-  const userId = ctx.from.id;
 
-  // Если пользователь уже авторизован, пропускаем проверку пароля
-  if (userAuthStatus[userId]) {
-    if (ctx.message.text === '/help') {
-      ctx.reply(`Это список доступных команд:
+// Обработчик команды /start
+bot.start((ctx) => {
+    ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец'}!`);
+});
+
+// Обработчик команды /help
+bot.help((ctx) => {
+    ctx.reply(`Это список доступных команд:
         /start - Перезапустить бота
         /showcase - Витрина
         /hot_drinks - Горячие напитки
@@ -27,317 +24,29 @@ bot.on('text', (ctx) => {
         /keywords - Ключевые слова
         /weekly - Недельная
         /noorgoodday - Не бывает плохого дня`);
-          }
-          return;
-  }
-
-  // Проверяем пароль
-  if (ctx.message.text === PASSWORD) {
-    userAuthStatus[userId] = true;
-    ctx.reply('Авторизация успешна! Теперь вы можете использовать команды.');
-  } else {
-    ctx.reply('Неверный пароль. Пожалуйста, попробуйте снова.');
-  }
 });
 
-
-bot.help((ctx) => ctx.reply(text.commands))
-
-// Обработчик команды /start
-bot.start((ctx) => {
-  ctx.reply(`Привет, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'незнакомец'}! Введите пароль для доступа к командам:`);
-});
-
-cron.schedule('30 07 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b>Доброе утро!🌅🌅🌅 Не забудьте сделать заготовки по бару, а также составить стоп-лист!</b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('30 07 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b>Отпишитесь в чат «МЕНЕДЖЕРЫ MERRY BERRY» что вы готовитесь к работе. </b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('00 08 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b> В чат «Графики» отправляете ваш график на сегодня. </b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('01 08 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b> В чат «Стандарты» отправляете фото всех сотрудников на смене, вместе с менеджером.(аккуратный, опрятный внешний вид. Чистый фартук, футболка, бейдж и значок всегда на вас. Если потеряли или забыли, попросите новый. Собранные волосы у девочек. </b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('00 08 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b> В чат «МЕНЕДЖЕРЫ MERRY BERRY” фото  красиво выставленной витрины, фото станции самообслуживания и печенья. </b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('02 08 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, `<b> Включаем музыку. 
-Подсветку включить обязательно.
-проверить урны (каждую), помыть. 
-Все стеклянные двери помыть. 
-Всё освещение проверить: вывеска, гирлянды, свет на баре и в зале.
-Кондиционер ставим на 24 градуса 
-всегда. </b>`, {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('03 08 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b> Не забудьте составить стоп-лист и хот-лист</b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('00 12 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b>В чат «МЕНЕДЖЕРЫ MERRY BERRY» фото выставленной витрины после заявки. </b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('00 13 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b>Не забывайте предлагать наши новинки в продукции гостям </b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('00 14 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b> Проверьте зал. Полы, столы, стулья. Все поправьте, протрите двери. Склад поддерживайте в чистоте. </b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('00 20 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b> Не забудьте заказать фрукты.(каждый день, кроме субботы)</b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('00 21 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b>Фото вашей витрины вечером в основной чат пожалуйста. </b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('00 23 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b> фото убранной, чистой витрины в основной чат, чтобы все видели что вы закрылись.</b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('30 21 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b>не забудьте отправить электронную заявку. </b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('00 18 * * 4', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b>Сегодня Чистый четверг. Нужно по окончании смены замочить всю посуду на ночь в растворе из белизны, моющего и воды. </b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('00 07 * * 6', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, `<b>Сегодня генеральная уборка у П1 и П2. 🧹 
-Убираем все тщательно, вымываем каждый угол, все столы и холодильники отодвигаем. </b>`, {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-cron.schedule('00 07 * * 0', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, `<b>Сегодня генеральная уборка у всех остальных кафе кроме МЕГАНОМА И ПРИМОРСКОГО (у вас в понедельник) 🧹 
-Убираем все тщательно, вымываем каждый угол, все столы и холодильники отодвигаем. </b>`, {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-cron.schedule('30 07 * * 1', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, `<b>Каждый понедельник и четверг в 8:00
-Заполните пожалуйста таблицу «склад» </b>`, {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-cron.schedule('30 07 * * 4', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, `<b>Каждый понедельник и четверг в 8:00
-Заполните пожалуйста таблицу «склад» </b>`, {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('00 08 * * *', async () => {
-    try {
-      await bot.telegram.sendMessage(chatId, '<b>ЦЕНТР и АЛУШТА! Не забудьте открыть маркизы</b>', {
-        parse_mode: 'HTML'
-      });
-      console.log('Message sent successfully');
-    } catch (error) {
-      console.error('Error sending message:', error);
+// Обработчик ошибок
+bot.catch((err) => {
+    if (err.response) {
+        if (err.response.error_code === 403) {
+            console.log(`Пользователь заблокировал бота: ${err.on.payload.chat_id}`);
+        } else if (err.response.error_code === 429) {
+            const retryAfter = err.response.parameters.retry_after;
+            console.log(`Слишком много запросов. Попробуйте снова через ${retryAfter} секунд.`);
+            setTimeout(() => {
+                bot.telegram.sendMessage(err.on.payload.chat_id, err.on.payload.text);
+            }, retryAfter * 1000);
+        }
+    } else {
+        console.error('Произошла ошибка:', err);
     }
-  }, {
-      scheduled: true,
-      timezone: "Europe/Moscow"
-  });
+});
 
-  cron.schedule('01 08 * * *', async () => {
+const scheduleMessage = (time, message) => {
+  cron.schedule(time, async () => {
     try {
-      await bot.telegram.sendMessage(chatId, '<b>Проверьте, пожалуйста, включена ли подсветка бара</b>', {
+      await bot.telegram.sendMessage(chatId, message, {
         parse_mode: 'HTML'
       });
       console.log('Message sent successfully');
@@ -348,117 +57,38 @@ cron.schedule('00 08 * * *', async () => {
     scheduled: true,
     timezone: "Europe/Moscow"
   });
+};
 
-  cron.schedule('00 10 * * *', async () => {
-    try {
-      await bot.telegram.sendMessage(chatId, '<b>☕️☕️☕️Не забываем проверять помол☕️☕️☕️</b>', {
-        parse_mode: 'HTML'
-      });
-      console.log('Message sent successfully');
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  }, {
-    scheduled: true,
-    timezone: "Europe/Moscow"
-});
-
-  cron.schedule('00 14 * * *', async () => {
-    try {
-      await bot.telegram.sendMessage(chatId, '<b>Проверьте помол, фотоотчет в соответствующий "тред" в нашем чате</b>', {
-        parse_mode: 'HTML'
-      });
-      console.log('Message sent successfully');
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  }, {
-    scheduled: true,
-    timezone: "Europe/Moscow"
-});
-cron.schedule('45 18 * * *', async () => {
-    try {
-      await bot.telegram.sendMessage(chatId, '<b>Через 15 минут нужно снять остатки по витрине🍰</b>', {
-        parse_mode: 'HTML'
-      });
-      console.log('Message sent successfully');
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  }, {
-    scheduled: true,
-    timezone: "Europe/Moscow"
-});
-
-cron.schedule('30 13 * * *', async () => {
-    try {
-      await bot.telegram.sendMessage(chatId, '<b>Проверьте зал, пожалуйста, чтобы всё было красиво и на своих местах</b>', {
-        parse_mode: 'HTML'
-      });
-      console.log('Message sent successfully');
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  }, {
-    scheduled: true,
-    timezone: "Europe/Moscow"
-});
-
-cron.schedule('30 17 * * *', async () => {
-    try {
-      await bot.telegram.sendMessage(chatId, '<b>Менеджеры осмотрите свои владения🏰 и обратите внимание на витрину🍰🍰🍰</b>', {
-        parse_mode: 'HTML'
-      });
-      console.log('Message sent successfully');
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  }, {
-    scheduled: true,
-    timezone: "Europe/Moscow"
-});
-
-cron.schedule('30 22 * * *', async () => {
-  try {
-    await bot.telegram.sendMessage(chatId, '<b>Обязательно на ночь замачиваем стимеры, фотоочет в группу</b>', {
-      parse_mode: 'HTML'
-    });
-    console.log('Message sent successfully');
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
-}, {
-  scheduled: true,
-  timezone: "Europe/Moscow"
-});
-
-cron.schedule('10 23 * * *', async () => {
-    try {
-      await bot.telegram.sendMessage(chatId, '<b>🌃Всем спасибо! Вы молодцы! До завтра!❤️</b>', {
-        parse_mode: 'HTML'
-      });
-      console.log('Message sent successfully');
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  }, {
-    scheduled: true,
-    timezone: "Europe/Moscow"
-});
-
-cron.schedule('30 09 * * 6', async () => {
-    try {
-      await bot.telegram.sendMessage(chatId, '<b>Напоминание: Не забудьте сделать недельную заявку</b>', {
-        parse_mode: 'HTML'
-      });
-      console.log('Message sent successfully');
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  }, {
-    scheduled: true,
-    timezone: "Europe/Moscow"
-});
+// Запланированные сообщения
+scheduleMessage('30 07 * * *', '<b>Доброе утро!🌅🌅🌅 Не забудьте сделать заготовки по бару, а также составить стоп-лист!</b>');
+scheduleMessage('30 07 * * *', '<b>Отпишитесь в чат «МЕНЕДЖЕРЫ MERRY BERRY» что вы готовитесь к работе. </b>');
+scheduleMessage('00 08 * * *', '<b>В чат «Графики» отправляете ваш график на сегодня.</b>');
+scheduleMessage('01 08 * * *', '<b>В чат «Стандарты» отправляете фото всех сотрудников на смене, вместе с менеджером. (аккуратный, опрятный внешний вид. Чистый фартук, футболка, бейдж и значок всегда на вас. Если потеряли или забыли, попросите новый. Собранные волосы у девочек.)</b>');
+scheduleMessage('00 08 * * *', '<b>В чат «МЕНЕДЖЕРЫ MERRY BERRY” фото красиво выставленной витрины, фото станции самообслуживания и печенья.</b>');
+scheduleMessage('02 08 * * *', '<b>Включаем музыку. Подсветку включить обязательно. Проверить урны (каждую), помыть. Все стеклянные двери помыть. Всё освещение проверить: вывеска, гирлянды, свет на баре и в зале. Кондиционер ставим на 24 градуса всегда.</b>');
+scheduleMessage('03 08 * * *', '<b>Не забудьте составить стоп-лист и хот-лист</b>');
+scheduleMessage('00 12 * * *', '<b>В чат «МЕНЕДЖЕРЫ MERRY BERRY» фото выставленной витрины после заявки.</b>');
+scheduleMessage('00 13 * * *', '<b>Не забывайте предлагать наши новинки в продукции гостям</b>');
+scheduleMessage('00 14 * * *', '<b>Проверьте зал. Полы, столы, стулья. Все поправьте, протрите двери. Склад поддерживайте в чистоте.</b>');
+scheduleMessage('00 20 * * *', '<b>Не забудьте заказать фрукты. (каждый день, кроме субботы)</b>');
+scheduleMessage('00 21 * * *', '<b>Фото вашей витрины вечером в основной чат пожалуйста.</b>');
+scheduleMessage('00 23 * * *', '<b>Фото убранной, чистой витрины в основной чат, чтобы все видели что вы закрылись.</b>');
+scheduleMessage('30 21 * * *', '<b>Не забудьте отправить электронную заявку.</b>');
+scheduleMessage('00 18 * * 4', '<b>Сегодня Чистый четверг. Нужно по окончании смены замочить всю посуду на ночь в растворе из белизны, моющего и воды.</b>');
+scheduleMessage('00 07 * * 6', '<b>Сегодня генеральная уборка у П1 и П2. 🧹 Убираем все тщательно, вымываем каждый угол, все столы и холодильники отодвигаем.</b>');
+scheduleMessage('00 07 * * 0', '<b>Сегодня генеральная уборка у всех остальных кафе кроме МЕГАНОМА И ПРИМОРСКОГО (у вас в понедельник) 🧹 Убираем все тщательно, вымываем каждый угол, все столы и холодильники отодвигаем.</b>');
+scheduleMessage('30 07 * * 1', '<b>Каждый понедельник и четверг в 8:00 Заполните пожалуйста таблицу «склад»</b>');
+scheduleMessage('30 07 * * 4', '<b>Каждый понедельник и четверг в 8:00 Заполните пожалуйста таблицу «склад»</b>');
+scheduleMessage('00 08 * * *', '<b>ЦЕНТР и АЛУШТА! Не забудьте открыть маркизы</b>');
+scheduleMessage('01 08 * * *', '<b>Проверьте, пожалуйста, включена ли подсветка бара</b>');
+scheduleMessage('00 10 * * *', '<b>☕️☕️☕️Не забываем проверять помол☕️☕️☕️</b>');
+scheduleMessage('00 14 * * *', '<b>Проверьте помол, фотоотчет в соответствующий "тред" в нашем чате</b>');
+scheduleMessage('45 18 * * *', '<b>Через 15 минут нужно снять остатки по витрине🍰</b>');
+scheduleMessage('30 13 * * *', '<b>Проверьте зал, пожалуйста, чтобы всё было красиво и на своих местах</b>');
+scheduleMessage('30 17 * * *', '<b>Менеджеры осмотрите свои владения🏰 и обратите внимание на витрину🍰🍰🍰</b>');
+scheduleMessage('30 22 * * *', '<b>Обязательно на ночь замачиваем стимеры, фотоочет в группу</b>');
+scheduleMessage('10 23 * * *', '<b>🌃Всем спасибо! Вы молодцы! До завтра!❤️</b>');
+scheduleMessage('30 09 * * 6', '<b>Напоминание: Не забудьте сделать недельную заявку</b>');
 
 const responses = [
   "Определенно! Улыбки и радость ждут тебя!",
@@ -631,30 +261,30 @@ bot.command('cold_drinks', async (ctx) => {
          console.error(e);
      }
  });
- bot.command('showcase', async (ctx) => {
-     try {
-         await ctx.replyWithHTML('<b>Витрина</b>', {
-             reply_markup: {
-                 inline_keyboard: [
-                     [{ text: 'Тарт Лимонный', callback_data: 'btn_43' }, { text: 'Анна Павлова', callback_data: 'btn_44' }, { text: 'Фундучное', callback_data: 'btn_45' }, { text: 'Тарт Лесные ягоды', callback_data: 'btn_46' }],
-                     [{ text: 'Сникерс', callback_data: 'btn_47' }, { text: 'Тирамису', callback_data: 'btn_48' }, { text: 'Медовик', callback_data: 'btn_49' }, { text: 'Панна Котта', callback_data: 'btn_50' }],
-                     [{ text: 'Манго/маракуйя', callback_data: 'btn_51' }, { text: 'Карамельно-ореховый', callback_data: 'btn_52' }, { text: 'Моти', callback_data: 'btn_53' }, { text: 'Макаронсы', callback_data: 'btn_54' }],
-                     [{ text: 'Чиз Классика', callback_data: 'btn_55' }, { text: 'Чиз Карамель', callback_data: 'btn_56' }, { text: 'Чиз Черничный', callback_data: 'btn_57' }, { text: 'Ягодная мерри', callback_data: 'btn_58' }],
-                     [{ text: 'Наполеон класс', callback_data: 'btn_59' }, { text: 'Наполеон шок', callback_data: 'btn_60' }, { text: 'Фисташковый', callback_data: 'btn_61' }, { text: 'Творожный', callback_data: 'btn_62' }],
-                     [{ text: 'Картошка', callback_data: 'btn_63' }, { text: 'Лесная сказка', callback_data: 'btn_64' }, { text: 'Пряник', callback_data: 'btn_65' }, { text: 'Шок-мятное', callback_data: 'btn_66' }],
-                     [{ text: 'Миндальное', callback_data: 'btn_67' }, { text: 'Овсяное', callback_data: 'btn_68' }, { text: 'Тройной шок', callback_data: 'btn_69' }, { text: 'Эклеры', callback_data: 'btn_70' }],
-                     [{ text: 'Таллер', callback_data: 'btn_71' }, { text: 'Шок-арахис', callback_data: 'btn_72' }, { text: 'Миндальный чипс', callback_data: 'btn_73' }, { text: 'Сендвичи', callback_data: 'btn_74' }],
-                     [{ text: 'Блины', callback_data: 'btn_75' }, { text: 'Сырники', callback_data: 'btn_76' }, { text: 'Кубете', callback_data: 'btn_77' }, { text: 'Шпинатный', callback_data: 'btn_78' }],
-                     [{ text: 'Курица/грибы', callback_data: 'btn_79' }, { text: 'Салат Греческий', callback_data: 'btn_80' }, { text: 'Салат Цезарь', callback_data: 'btn_81' }, { text: 'Круассаны', callback_data: 'btn_82' }],
-                     [{ text: 'Роллы', callback_data: 'btn_83' }],
-                 ]
-             }
-         });
-     } catch (e) {
-         console.error(e);
-     }
- });
-
+// Обработчик команды /showcase
+bot.command('showcase', async (ctx) => {
+  try {
+      await ctx.replyWithHTML('<b>Витрина</b>', {
+          reply_markup: {
+              inline_keyboard: [
+                  [{ text: 'Тарт Лимонный', callback_data: 'btn_43' }, { text: 'Анна Павлова', callback_data: 'btn_44' }, { text: 'Фундучное', callback_data: 'btn_45' }, { text: 'Тарт Лесные ягоды', callback_data: 'btn_46' }],
+                  [{ text: 'Сникерс', callback_data: 'btn_47' }, { text: 'Тирамису', callback_data: 'btn_48' }, { text: 'Медовик', callback_data: 'btn_49' }, { text: 'Панна Котта', callback_data: 'btn_50' }],
+                  [{ text: 'Манго/маракуйя', callback_data: 'btn_51' }, { text: 'Карамельно-ореховый', callback_data: 'btn_52' }, { text: 'Моти', callback_data: 'btn_53' }, { text: 'Макаронсы', callback_data: 'btn_54' }],
+                  [{ text: 'Чиз Классика', callback_data: 'btn_55' }, { text: 'Чиз Карамель', callback_data: 'btn_56' }, { text: 'Чиз Черничный', callback_data: 'btn_57' }, { text: 'Ягодная мерри', callback_data: 'btn_58' }],
+                  [{ text: 'Наполеон класс', callback_data: 'btn_59' }, { text: 'Наполеон шок', callback_data: 'btn_60' }, { text: 'Фисташковый', callback_data: 'btn_61' }, { text: 'Творожный', callback_data: 'btn_62' }],
+                  [{ text: 'Картошка', callback_data: 'btn_63' }, { text: 'Лесная сказка', callback_data: 'btn_64' }, { text: 'Пряник', callback_data: 'btn_65' }, { text: 'Шок-мятное', callback_data: 'btn_66' }],
+                  [{ text: 'Миндальное', callback_data: 'btn_67' }, { text: 'Овсяное', callback_data: 'btn_68' }, { text: 'Тройной шок', callback_data: 'btn_69' }, { text: 'Эклеры', callback_data: 'btn_70' }],
+                  [{ text: 'Таллер', callback_data: 'btn_71' }, { text: 'Шок-арахис', callback_data: 'btn_72' }, { text: 'Миндальный чипс', callback_data: 'btn_73' }, { text: 'Сендвичи', callback_data: 'btn_74' }],
+                  [{ text: 'Блины', callback_data: 'btn_75' }, { text: 'Сырники', callback_data: 'btn_76' }, { text: 'Кубете', callback_data: 'btn_77' }, { text: 'Шпинатный', callback_data: 'btn_78' }],
+                  [{ text: 'Курица/грибы', callback_data: 'btn_79' }, { text: 'Салат Греческий', callback_data: 'btn_80' }, { text: 'Салат Цезарь', callback_data: 'btn_81' }, { text: 'Круассаны', callback_data: 'btn_82' }],
+                  [{ text: 'Роллы', callback_data: 'btn_83' }],
+              ]
+          }
+      });
+  } catch (e) {
+      console.error(e);
+  }
+});
  bot.command('work', async (ctx) => {
      try {
             
