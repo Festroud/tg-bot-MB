@@ -302,7 +302,7 @@ bot.command('showcase', async (ctx) => {
     try {
            
         const weekly = 'https://docs.google.com/spreadsheets/d/1uSS4f6Cvwmu-JuJkHEOH6sdTzaao6_TOMHOy-t8X56A/edit?usp=sharing';
-        await ctx.replyWithHTML(`Недельная заявка <a href="${weekly}"></a>.`, {
+        await ctx.replyWithHTML(`<a href="${weekly}">Недельная заявка</a>.`, {
             disable_web_page_preview: true
         });
 
