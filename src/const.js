@@ -5,10 +5,12 @@ const commands = `
 /cold_drinks - Холодные напитки
 /work - Рабочий график
 /keywords - Ключевые слова
-/help - Помощь
-/weekly - недельная
-/noorgoodday - не бывает плохого дня
-`
+/weekly - Недельная заявка
+/noorgoodday - Не бывает плохого дня
+/weather - узнать погоду на сегодня
+`;
+
+module.exports = { commands };
 
 const text1 = 'Эспрессо'
 const text2 = 'Американо'
