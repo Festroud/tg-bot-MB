@@ -5,7 +5,7 @@
   "main": "./src/bot.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Roychh/tbm.git"
+    "url": "https://github.com/Festroud/tg-bot-MB.git"
   },
   "scripts": {
     "start": "node src/bot.js",
