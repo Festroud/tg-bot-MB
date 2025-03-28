@@ -9,7 +9,7 @@ const {
   text51, text52, text53, text54, text55, text56, text57, text58, text59, text60,
   text61, text62, text63, text64, text65, text66, text67, text68, text69, text70,
   text71, text72, text73, text74, text75, text76, text77, text78, text79, text80,
-  text81, text82, text83, text84, text85, text86, text87
+  text81, text82, text83, text84, text85, text86, text87, text88, text89
 } = require('../const');
 
 // Карта соответствия кнопок и текстов
@@ -26,7 +26,8 @@ const PRODUCT_TEXT_MAP = {
   'btn_26': text26, 'btn_27': text27, 'btn_28': text28, 'btn_29': text29, 'btn_30': text30,
   'btn_31': text31, 'btn_32': text32, 'btn_33': text33, 'btn_34': text34, 'btn_35': text35,
   'btn_36': text36, 'btn_37': text37, 'btn_38': text38, 'btn_39': text39, 'btn_40': text40,
-  'btn_41': text41, 'btn_42': text42, 'btn_84': text84, 'btn_85': text85,
+  'btn_41': text41, 'btn_42': text42, 'btn_84': text84, 'btn_85': text85, 'btn_88': text88,
+  'btn_89': text89,
 
   // Витрина
   'btn_43': text43, 'btn_44': text44, 'btn_45': text45, 'btn_46': text46, 'btn_47': text47,
@@ -59,7 +60,7 @@ const PRODUCT_IMAGE_MAP = {
   'btn_33': 'cold/c13.jpg', 'btn_34': 'cold/c14.jpg', 'btn_35': 'cold/c15.jpg',
   'btn_36': 'cold/c16.jpg', 'btn_37': 'cold/c17.jpg', 'btn_38': 'cold/c18.jpg',
   'btn_39': 'cold/c19.jpg', 'btn_40': 'cold/c20.jpg', 'btn_41': 'cold/c21.jpg',
-  'btn_42': 'cold/c22.jpg',
+  'btn_42': 'cold/c22.jpg', 'btn_88': 'cold/c23.jpg', 'btn_89': 'cold/c24.jpg',
 
   // Витрина
   'btn_43': 'showcase/tartlim.jpg', 'btn_44': 'showcase/anna.jpg',

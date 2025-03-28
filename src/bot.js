@@ -1,9 +1,8 @@
 const { Telegraf } = require('telegraf');
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
 const config = require('./config');
 const { setupCallbackHandlers } = require('./handlers/callbackQuery');
 const MessageScheduler = require('./services/schedule');
-const { setupInteractive } = require('./handlers/interactive');
 const { helpCommand } = require('./commands/help');
 const { startCommand } = require('./commands/start');
 const { hotDrinksCommand } = require('./commands/hotDrinks');
@@ -38,7 +37,6 @@ const scheduler = new MessageScheduler(bot);
 scheduler.init();
 
 // Настройка интерактивных обработчиков
-setupInteractive(bot);
 setupCallbackHandlers(bot);
 
 // Глобальный обработчик ошибок
@@ -54,10 +52,6 @@ bot.catch((err, ctx) => {
   // Для других ошибок пытаемся отправить сообщение
   ctx?.reply('⚠️ Произошла ошибка, попробуйте позже').catch(() => {});
 });
-// // Обработка ошибок
-// bot.catch((err) => {
-//   console.error('Произошла ошибка:', err);
-// });
 
 // Запуск бота
 bot.launch().then(() => {

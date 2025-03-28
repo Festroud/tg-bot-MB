@@ -43,6 +43,10 @@ async function coldDrinksCommand(ctx) {
               { text: 'Фраппе', callback_data: 'btn_84' },
               { text: 'Тархун', callback_data: 'btn_85' },
             ],
+            [
+              { text: 'Матча Бамбл', callback_data: 'btn_88' },
+              { text: 'Матча Тоник', callback_data: 'btn_89' },
+            ]
           ],
         },
       });

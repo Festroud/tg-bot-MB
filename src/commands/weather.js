@@ -3,7 +3,7 @@ const { getWeather, getWeatherByCoords } = require('../services/weather');
 async function weatherCommand(ctx) {
   // Если команда вызвана не в приватном чате - игнорируем
   if (ctx.chat.type !== 'private') {
-    return; // Просто выходим без ответа
+    return;
   }
 
   // Если есть текст после команды (город)
@@ -24,7 +24,7 @@ async function weatherCommand(ctx) {
     reply_markup: {
       keyboard: [
         [{ text: "📍 Отправить геолокацию", request_location: true }],
-        ["/weather Симферополь", "/weather Ялта", "/weather Алушта", "/weather Судак", "/weather Евпатория"]
+        ["/weather Симферополь", "/weather Ялта", "/weather Алушта"]
       ],
       resize_keyboard: true,
       one_time_keyboard: true
