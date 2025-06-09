@@ -1,11 +1,11 @@
-function showcaseCommand(ctx) {
+async function showcaseCommand(ctx) {
     try {
-      ctx.replyWithHTML('<b>Витрина</b>', {
+      ctx.replyWithHTML('<b>🌯🥗🍮Витрина</b>', {
         reply_markup: {
           inline_keyboard: [
             [
               { text: 'Тарт Лимонный', callback_data: 'btn_43' },
-              { text: 'Анна Павлова', callback_data: 'btn_44' },
+              // { text: 'Анна Павлова', callback_data: 'btn_44' },
               { text: 'Фундучное', callback_data: 'btn_45' },
               { text: 'Тарт Лесные ягоды', callback_data: 'btn_46' },
             ],
@@ -16,9 +16,9 @@ function showcaseCommand(ctx) {
               { text: 'Панна Котта', callback_data: 'btn_50' },
             ],
             [
-              { text: 'Манго/маракуйя', callback_data: 'btn_51' },
-              { text: 'Карамельно-ореховый', callback_data: 'btn_52' },
-              { text: 'Моти', callback_data: 'btn_53' },
+              { text: 'Донаты', callback_data: 'btn_51' },
+              { text: 'Дубайский чиз', callback_data: 'btn_52' },
+              // { text: 'Моти', callback_data: 'btn_53' },
               { text: 'Макаронсы', callback_data: 'btn_54' },
             ],
             [

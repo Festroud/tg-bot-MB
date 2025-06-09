@@ -9,7 +9,8 @@ const {
   text51, text52, text53, text54, text55, text56, text57, text58, text59, text60,
   text61, text62, text63, text64, text65, text66, text67, text68, text69, text70,
   text71, text72, text73, text74, text75, text76, text77, text78, text79, text80,
-  text81, text82, text83, text84, text85, text86, text87, text88, text89
+  text81, text82, text83, text84, text85, text86, text87, text88, text89, text90,
+  text91, text92, text93
 } = require('../const');
 
 // Карта соответствия кнопок и текстов
@@ -28,7 +29,8 @@ const PRODUCT_TEXT_MAP = {
   'btn_36': text36, 'btn_37': text37, 'btn_38': text38, 'btn_39': text39, 'btn_40': text40,
   'btn_41': text41, 'btn_42': text42, 'btn_84': text84, 'btn_85': text85, 'btn_88': text88,
   'btn_89': text89,
-
+  //Бабл меню
+  'btn_90': text90, 'btn_91': text91, 'btn_92': text92, 'btn_93': text93,
   // Витрина
   'btn_43': text43, 'btn_44': text44, 'btn_45': text45, 'btn_46': text46, 'btn_47': text47,
   'btn_48': text48, 'btn_49': text49, 'btn_50': text50, 'btn_51': text51, 'btn_52': text52,
@@ -52,6 +54,10 @@ const PRODUCT_IMAGE_MAP = {
   'btn_16': 'hot/h16.jpg', 'btn_17': 'hot/h17.jpg', 'btn_18': 'hot/h18.jpg',
   'btn_19': 'hot/h19.jpg', 'btn_20': 'hot/h20.jpg',
 
+  // Бабл меню
+  'btn_90': 'bubbles/coffee.jpg', 'btn_91': 'bubbles/shake.jpg',
+  'btn_92': 'bubbles/icetea.jpg', 'btn_93': 'bubbles/juice.jpg',
+
   // Холодные напитки
   'btn_21': 'cold/c1.jpg', 'btn_22': 'cold/c2.jpg', 'btn_23': 'cold/c3.jpg',
   'btn_24': 'cold/c4.jpg', 'btn_25': 'cold/c5.jpg', 'btn_26': 'cold/c6.jpg',
@@ -61,6 +67,7 @@ const PRODUCT_IMAGE_MAP = {
   'btn_36': 'cold/c16.jpg', 'btn_37': 'cold/c17.jpg', 'btn_38': 'cold/c18.jpg',
   'btn_39': 'cold/c19.jpg', 'btn_40': 'cold/c20.jpg', 'btn_41': 'cold/c21.jpg',
   'btn_42': 'cold/c22.jpg', 'btn_88': 'cold/c23.jpg', 'btn_89': 'cold/c24.jpg',
+  'btn_84': 'cold/c26.jpg','btn_85': 'cold/c25.jpg',
 
   // Витрина
   'btn_43': 'showcase/tartlim.jpg', 'btn_44': 'showcase/anna.jpg',
@@ -86,90 +93,50 @@ const PRODUCT_IMAGE_MAP = {
   'btn_83': 'showcase/rolls.jpg'
 };
 
-/**
- * Получает полный путь к изображению продукта
- * @param {string} buttonId - ID кнопки (например, 'btn_1')
- * @returns {string|null} Полный путь к изображению или null если не найдено
- */
 function getProductImagePath(buttonId) {
   const relativePath = PRODUCT_IMAGE_MAP[buttonId];
-  if (!relativePath) {
-    console.warn(`Не найден путь к изображению для кнопки ${buttonId}`);
-    return null;
-  }
-
-  const fullPath = path.join(__dirname, '../img', relativePath);
-  
-  if (!fs.existsSync(fullPath)) {
-    console.error(`Изображение не найдено по пути: ${fullPath}`);
-    return null;
-  }
-
-  return fullPath;
+  if (!relativePath) return null;
+  return path.join(__dirname, '../img', relativePath);
 }
 
-/**
- * Обрабатывает запрос погоды по геолокации
- * @param {TelegrafContext} ctx - Контекст Telegraf
- */
 async function handleWeatherLocationRequest(ctx) {
-  try {
-    await ctx.answerCbQuery();
-    await ctx.reply('Пожалуйста, отправьте вашу геолокацию:', {
-      reply_markup: {
-        keyboard: [
-          [{ text: "📍 Отправить местоположение", request_location: true }]
-        ],
-        resize_keyboard: true,
-        one_time_keyboard: true
-      }
-    });
-  } catch (error) {
-    console.error('Ошибка при обработке запроса геолокации:', error);
-    await ctx.answerCbQuery('⚠️ Произошла ошибка при запросе геолокации');
-  }
+  await ctx.answerCbQuery();
+  await ctx.reply('Пожалуйста, отправьте вашу геолокацию:', {
+    reply_markup: {
+      keyboard: [
+        [{ text: "Отправить местоположение", request_location: true }]
+      ],
+      resize_keyboard: true,
+      one_time_keyboard: true
+    }
+  });
 }
 
-/**
- * Обрабатывает нажатие на кнопку продукта
- * @param {TelegrafContext} ctx - Контекст Telegraf
- * @param {string} buttonId - ID кнопки
- * @param {string} productText - Текст описания продукта
- */
 async function handleProductButtonClick(ctx, buttonId, productText) {
   try {
     const imagePath = getProductImagePath(buttonId);
     
-    // Отправляем текст продукта
     await ctx.replyWithHTML(`<b>Информация о продукте:</b>\n\n${productText}`, {
       disable_web_page_preview: true
     });
     
-    // Если есть изображение - отправляем его
     if (imagePath) {
       await ctx.replyWithPhoto({ source: imagePath });
     }
     
     await ctx.answerCbQuery();
   } catch (error) {
-    console.error(`Ошибка при обработке кнопки ${buttonId}:`, error);
     await ctx.answerCbQuery('⚠️ Произошла ошибка при обработке запроса');
   }
 }
 
-/**
- * Настраивает обработчики callback-запросов для бота
- * @param {Telegraf} bot - Экземпляр бота Telegraf
- */
-function setupCallbackHandlers(bot) {
-  // Регистрируем обработчики для всех продуктов
+async function setupCallbackHandlers(bot) {
   Object.entries(PRODUCT_TEXT_MAP).forEach(([buttonId, productText]) => {
     bot.action(buttonId, async (ctx) => {
       await handleProductButtonClick(ctx, buttonId, productText);
     });
   });
 
-  // Регистрируем специальные обработчики
   bot.action('get_weather_by_location', handleWeatherLocationRequest);
 }
 

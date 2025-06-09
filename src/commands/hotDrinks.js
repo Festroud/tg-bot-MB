@@ -1,4 +1,4 @@
-function hotDrinksCommand(ctx) {
+async function hotDrinksCommand(ctx) {
     try {
       ctx.replyWithHTML('<b>ГОРЯЧИЕ НАПИТКИ</b>', {
         reply_markup: {

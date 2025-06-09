@@ -12,12 +12,10 @@ class MessageScheduler {
     try {
       const category = messages[type];
       if (!category || !Array.isArray(category)) {
-        console.error(`Категория сообщений ${type} не найдена или не является массивом`);
-        return messages.motivational[0]; // Возвращаем сообщение по умолчанию
+        return messages.motivational[0];
       }
       return category[Math.floor(Math.random() * category.length)];
     } catch (error) {
-      console.error('Ошибка при получении случайного сообщения:', error);
       return { text: 'Произошла ошибка при подготовке сообщения', emoji: '❌' };
     }
   }
@@ -32,7 +30,6 @@ class MessageScheduler {
 
       const message = `${messageObj.text} ${messageObj.emoji || ''}`.trim();
       await this.bot.telegram.sendMessage(this.chatId, message, { parse_mode: 'HTML' });
-      console.log(`[${type}] Сообщение успешно отправлено`);
     } catch (error) {
       console.error(`Ошибка при отправке сообщения типа ${type}:`, error);
     }
@@ -43,19 +40,16 @@ class MessageScheduler {
     try {
       // Утренняя мотивация
       cron.schedule('30 8 * * *', () => {
-        console.log('[MOTIVATIONAL] Запуск утренней мотивации');
         this.sendInteractiveMessage('motivational');
       }, { timezone: 'Europe/Moscow' });
 
       // Факт дня (01:19)
       cron.schedule('19 1 * * *', () => {
-        console.log('[DAY_FACT] Запуск факта дня');
         this.sendInteractiveMessage('dayFact');
       }, { timezone: 'Europe/Moscow' });
 
       // Вечерняя благодарность
       cron.schedule('30 20 * * *', () => {
-        console.log('[THANKS] Запуск вечерней благодарности');
         this.sendInteractiveMessage('thanks');
       }, { timezone: 'Europe/Moscow' });
 
@@ -63,11 +57,8 @@ class MessageScheduler {
       cron.schedule('0 10-20/2 * * *', () => {
         const types = ['motivational', 'facts', 'jokes', 'thanks', 'coffeeTips'];
         const type = types[Math.floor(Math.random() * types.length)];
-        console.log(`[RANDOM] Запуск случайного сообщения типа ${type}`);
         this.sendInteractiveMessage(type);
       }, { timezone: 'Europe/Moscow' });
-
-      console.log('Мотивационные сообщения настроены');
     } catch (error) {
       console.error('Ошибка при настройке мотивационных сообщений:', error);
     }
@@ -111,7 +102,6 @@ class MessageScheduler {
       reminders.forEach(reminder => {
         cron.schedule(reminder.time, async () => {
           try {
-            console.log(`[REMINDER] Отправка напоминания: ${reminder.time}`);
             await this.bot.telegram.sendMessage(this.chatId, reminder.text, { parse_mode: 'HTML' });
             
             if(reminder.time.includes('8:00') || reminder.time.includes('20:00')) {
@@ -125,8 +115,6 @@ class MessageScheduler {
           }
         }, { timezone: 'Europe/Moscow' });
       });
-
-      console.log('Рабочие напоминания настроены');
     } catch (error) {
       console.error('Ошибка при настройке рабочих напоминаний:', error);
     }
@@ -137,7 +125,6 @@ class MessageScheduler {
     try {
       this.setupWorkReminders();
       this.setupMotivationalMessages();
-      console.log('Все расписания успешно настроены!');
     } catch (error) {
       console.error('Ошибка при инициализации расписаний:', error);
     }

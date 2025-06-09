@@ -1,6 +1,6 @@
 const { commands } = require('../const');
 
-function helpCommand(ctx) {
+async function helpCommand(ctx) {
   try {
     // Используем HTML-форматирование для лучшей читаемости
     ctx.replyWithHTML(`<b>Список доступных команд:</b>\n${commands}`);

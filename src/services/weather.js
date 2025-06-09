@@ -15,7 +15,6 @@ async function getWeather(city) {
     });
     return formatWeatherData(response.data);
   } catch (error) {
-    console.error('Ошибка при запросе погоды:', error);
     return 'Не удалось получить данные о погоде. Проверьте название города.';
   }
 }
@@ -45,7 +44,6 @@ async function getWeatherByCoords(lat, lon) {
     
     return formatWeatherData(weatherResponse.data);
   } catch (error) {
-    console.error('Ошибка при запросе погоды по координатам:', error);
     return 'Не удалось определить погоду для вашего местоположения.';
   }
 }

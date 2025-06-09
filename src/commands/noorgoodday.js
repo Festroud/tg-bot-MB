@@ -1,10 +1,10 @@
 const { responses } = require('../utils/responses');
 const { getData, saveData } = require('../utils/helpers');
 
-function noorgooddayCommand(ctx) {
+async function noorgooddayCommand(ctx) {
   try {
     const chatId = ctx.chat.id;
-    const data = getData() || {}; // Проверка на undefined
+    const data = await getData() || {}; // Проверка на undefined
     const today = new Date().toISOString().split('T')[0];
 
     if (data.lastResponseDate === today) {
@@ -20,7 +20,7 @@ function noorgooddayCommand(ctx) {
     const randomResponse = responses[Math.floor(Math.random() * responses.length)];
     data.lastResponseDate = today;
     data.lastResponseText = randomResponse;
-    saveData(data);
+    await saveData(data);
 
     return ctx.reply(randomResponse);
   } catch (error) {

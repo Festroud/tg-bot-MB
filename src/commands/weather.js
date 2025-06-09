@@ -1,19 +1,19 @@
 const { getWeather, getWeatherByCoords } = require('../services/weather');
 
+// Если команда вызвана не в приватном чате - игнорируем
 async function weatherCommand(ctx) {
-  // Если команда вызвана не в приватном чате - игнорируем
-  if (ctx.chat.type !== 'private') {
+    if (ctx.chat.type !== 'private') {
     return;
   }
 
-  // Если есть текст после команды (город)
+  // Если есть город после команды
   if (ctx.message.text.split(' ')[1]) {
     const city = ctx.message.text.split(' ')[1];
     const weatherInfo = await getWeather(city);
     return ctx.reply(weatherInfo, {
       reply_markup: {
         inline_keyboard: [
-          [{ text: "📍 Узнать погоду по моей геолокации", callback_data: "get_weather_by_location" }]
+          [{ text: "Узнать погоду по моей геолокации", callback_data: "get_weather_by_location" }]
         ]
       }
     });
@@ -23,7 +23,7 @@ async function weatherCommand(ctx) {
   ctx.reply('Вы можете:', {
     reply_markup: {
       keyboard: [
-        [{ text: "📍 Отправить геолокацию", request_location: true }],
+        [{ text: "Отправить геолокацию", request_location: true }],
         ["/weather Симферополь", "/weather Ялта", "/weather Алушта"]
       ],
       resize_keyboard: true,
@@ -54,7 +54,7 @@ async function handleLocationButton(ctx) {
   await ctx.reply('Пожалуйста, отправьте вашу геолокацию:', {
     reply_markup: {
       keyboard: [
-        [{ text: "📍 Отправить местоположение", request_location: true }]
+        [{ text: "Отправить геолокацию", request_location: true }]
       ],
       resize_keyboard: true,
       one_time_keyboard: true

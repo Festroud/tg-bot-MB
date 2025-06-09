@@ -6,11 +6,11 @@ const COMMANDS = {
   HELP: 'помогите',
   READ: 'читать',
   AMHARA: 'амхара',
-  MANAGER: 'менеджер',
+  MANAGER: 'об-мен',
   POMOL: 'помол'
 };
 
-function handleMessage(ctx) {
+async function handleMessage(ctx) {
   try {
     // Проверяем наличие сообщения и текста
     if (!ctx?.message?.text) {
